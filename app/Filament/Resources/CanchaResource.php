@@ -23,14 +23,24 @@ class CanchaResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nombre de la Cancha')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('type')
+                    ->label('Tipo de Cancha')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('location')
+                    ->label('Ubicación')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('precio')
+                    ->label('Precio por Turno')
+                    ->numeric()
+                    ->required()
+                    ->default(150)
+                    ->step(0.01)
+                    ->prefix('$'),
             ]);
     }
 
@@ -39,11 +49,18 @@ class CanchaResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nombre')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('type')
+                    ->label('Tipo')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('location')
+                    ->label('Ubicación')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('precio')
+                    ->label('Precio')
+                    ->money('ARS')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
