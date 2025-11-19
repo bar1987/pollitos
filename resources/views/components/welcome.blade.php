@@ -17,31 +17,10 @@
     <!-- Lista de canchas -->
     <div class="space-y-4">
         @php
-            $canchas = [
-                [
-                    'name' => 'El Chañaral',
-                    'address' => 'El Chañaral 1800',
-                    'type' => 'Fútbol 5'
-                ],
-                [
-                    'name' => 'El Galpón',
-                    'address' => 'Av. Hipólito Yrigoyen 2894',
-                    'type' => 'Fútbol 11'
-                ],
-                [
-                    'name' => 'Roca Canchas',
-                    'address' => 'Avenida Julio A. Roca 1601',
-                    'type' => 'Fútbol 5'
-                ],
-                [
-                    'name' => 'Al Ángulo',
-                    'address' => 'Calle Principal 450',
-                    'type' => 'Fútbol 5'
-                ]
-            ];
+            $canchas = \App\Models\Cancha::all();
         @endphp
 
-        @foreach($canchas as $cancha)
+        @forelse($canchas as $cancha)
             <div class="flex items-center justify-between p-4 border-2 border-gray-300 rounded-3xl hover:border-blue-600 hover:shadow-md transition duration-200">
                 <div class="flex items-center space-x-3 flex-grow">
                     <!-- Ícono de cancha -->
@@ -51,17 +30,21 @@
 
                     <!-- Información de la cancha -->
                     <div class="flex-grow">
-                        <h3 class="font-semibold text-gray-900">{{ $cancha['name'] }}</h3>
-                        <p class="text-sm text-gray-600">{{ $cancha['address'] }}</p>
-                        <p class="text-xs text-gray-500">{{ $cancha['type'] }}</p>
+                        <h3 class="font-semibold text-gray-900">{{ $cancha->name }}</h3>
+                        <p class="text-sm text-gray-600">{{ $cancha->location }}</p>
+                        <p class="text-xs text-gray-500">{{ $cancha->type }}</p>
                     </div>
                 </div>
 
                 <!-- Botón -->
-                <button class="ml-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full transition duration-200 text-sm whitespace-nowrap">
+                <a href="{{ route('turnos-disponibles', $cancha->id) }}" class="ml-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full transition duration-200 text-sm whitespace-nowrap inline-block">
                     Ver turnos disponibles
-                </button>
+                </a>
             </div>
-        @endforeach
+        @empty
+            <div class="p-6 bg-gray-100 rounded-3xl text-center">
+                <p class="text-gray-600 font-semibold">No hay canchas disponibles en este momento.</p>
+            </div>
+        @endforelse
     </div>
 </div>
