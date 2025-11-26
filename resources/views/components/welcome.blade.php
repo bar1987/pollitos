@@ -1,13 +1,16 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
     <!-- Header -->
     <div class="max-w-7xl mx-auto">
-        <div class="mb-12">
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">
-                ⚽ Mi Dashboard - Reserva una Cancha
-            </h1>
-            <p class="text-lg text-gray-600">
-                Selecciona una cancha disponible y elige tu turno favorito
-            </p>
+        <div class="mb-12 flex items-center gap-4">
+            <img src="{{ asset('images/logo/Logo final.png') }}" alt="TurnosCancha Logo" class="h-16 w-auto">
+            <div>
+                <h1 class="text-4xl font-bold text-gray-900 mb-0">
+                    Mi Dashboard - Reserva una Cancha
+                </h1>
+                <p class="text-lg text-gray-600">
+                    Selecciona una cancha disponible y elige tu turno favorito
+                </p>
+            </div>
         </div>
 
         <!-- Canchas Grid -->

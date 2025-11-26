@@ -17,7 +17,10 @@
                     </svg>
                     Volver
                 </a>
-                <h1 class="text-3xl font-bold text-gray-900">Comprobante de Reserva</h1>
+                <div class="flex items-center gap-3 mb-4">
+                    <img src="{{ asset('images/logo/Logo final.png') }}" alt="TurnosCancha Logo" class="h-12 w-auto">
+                    <h1 class="text-3xl font-bold text-gray-900">Comprobante de Reserva</h1>
+                </div>
             </div>
 
             <!-- Comprobante Imprimible -->

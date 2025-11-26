@@ -17,7 +17,10 @@
                     </svg>
                     Volver
                 </a>
-                <h1 class="text-3xl font-bold text-gray-900">Confirmar Turno</h1>
+                <div class="flex items-center gap-3 mb-4">
+                    <img src="{{ asset('images/logo/Logo final.png') }}" alt="TurnosCancha Logo" class="h-12 w-auto">
+                    <h1 class="text-3xl font-bold text-gray-900">Confirmar Turno</h1>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

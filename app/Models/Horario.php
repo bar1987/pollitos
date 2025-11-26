@@ -21,8 +21,8 @@ class Horario extends Model
     ];
 
     protected $casts = [
-        'hora_inicio' => 'datetime:H:i',
-        'hora_fin'    => 'datetime:H:i',
+        'hora_inicio' => 'string',
+        'hora_fin'    => 'string',
         'activo'      => 'boolean',
     ];
 

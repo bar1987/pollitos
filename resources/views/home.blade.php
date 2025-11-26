@@ -11,11 +11,9 @@
     <header class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div class="flex justify-between items-center">
-                <div class="flex items-center">
-                    <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 3a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.788l-1.314.657 1.314.657a1 1 0 11-.894 1.788l-1.599-.799-3.954 1.581V16a1 1 0 11-2 0v-1.323L6.046 12.595l-1.599.799a1 1 0 11-.894-1.788l1.314-.657-1.314-.657a1 1 0 01.894-1.788l1.599.8L8 5.323V4a1 1 0 011-1h1V3z" />
-                    </svg>
-                    <h1 class="ml-3 text-2xl font-bold text-gray-900">TurnosCancha</h1>
+                <div class="flex items-center gap-3">
+                    <img src="{{ asset('images/logo/Logo final.png') }}" alt="TurnosCancha Logo" class="h-12 w-auto">
+                    <h1 class="text-2xl font-bold text-gray-900">TurnosCancha</h1>
                 </div>
                 <div class="flex gap-4">
                     @auth

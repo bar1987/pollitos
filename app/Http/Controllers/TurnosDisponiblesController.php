@@ -114,19 +114,19 @@ class TurnosDisponiblesController extends Controller
     {
         $validated = $request->validate([
             'cancha_id' => 'required|exists:canchas,id',
-            'fecha' => 'required|date',
+            'fecha' => 'required|date_format:Y-m-d',
             'hora_inicio' => 'required',
         ]);
 
         $cancha = Cancha::findOrFail($validated['cancha_id']);
         $precio = $cancha->precio ?? 150; // Usar precio de la cancha o 150 por defecto
 
-        // Guardar en sesión
+        // Guardar en sesión - asegurar que fecha sea string en formato Y-m-d
         session([
             'turno_pendiente' => [
                 'cancha_id' => $validated['cancha_id'],
-                'fecha' => $validated['fecha'],
-                'hora_inicio' => $validated['hora_inicio'],
+                'fecha' => (string)$validated['fecha'],
+                'hora_inicio' => (string)$validated['hora_inicio'],
             ]
         ]);
 
@@ -212,35 +212,40 @@ class TurnosDisponiblesController extends Controller
             return redirect('/')->with('error', 'Datos de pago incompletos');
         }
 
-        // Crear o obtener cliente
-        $client = Client::firstOrCreate(
-            ['email' => $datos_pago['email']],
-            [
-                'first_name' => $datos_pago['nombre'],
-                'last_name' => '',
-                'email' => $datos_pago['email'],
-            ]
-        );
+        try {
+            // Crear o obtener cliente
+            $client = Client::firstOrCreate(
+                ['email' => $datos_pago['email']],
+                [
+                    'first_name' => $datos_pago['nombre'],
+                    'last_name' => '',
+                    'email' => $datos_pago['email'],
+                ]
+            );
 
-        // Crear turno
-        $turno = Turno::create([
-            'cancha_id' => $turno_pendiente['cancha_id'],
-            'client_id' => $client->id,
-            'start_datetime' => Carbon::parse($turno_pendiente['fecha'] . ' ' . $turno_pendiente['hora_inicio']),
-        ]);
+            // Crear turno
+            $turno = Turno::create([
+                'cancha_id' => $turno_pendiente['cancha_id'],
+                'client_id' => $client->id,
+                'start_datetime' => Carbon::parse($turno_pendiente['fecha'] . ' ' . $turno_pendiente['hora_inicio']),
+            ]);
 
-        // Crear pago
-        $pago = Pago::create([
-            'turno_id' => $turno->id,
-            'monto' => $datos_pago['precio'],
-            'metodo_pago' => $datos_pago['metodo_pago'],
-            'estado' => 'completado',
-        ]);
+            // Crear pago
+            $pago = Pago::create([
+                'turno_id' => $turno->id,
+                'monto' => $datos_pago['precio'],
+                'metodo_pago' => $datos_pago['metodo_pago'],
+                'estado' => 'completado',
+            ]);
 
-        // Limpiar sesión
-        session()->forget(['turno_pendiente', 'datos_pago']);
+            // Limpiar sesión
+            session()->forget(['turno_pendiente', 'datos_pago']);
 
-        return redirect()->route('welcome')->with('success', 'Pago confirmado exitosamente. Tu turno ha sido registrado.');
+            return redirect('/')->with('success', 'Pago confirmado exitosamente. Tu turno ha sido registrado.');
+        } catch (\Exception $e) {
+            \Log::error('Error al confirmar pago: ' . $e->getMessage());
+            return redirect('/')->with('error', 'Error al procesar el pago. Por favor, intenta nuevamente.');
+        }
     }
 
     /**
