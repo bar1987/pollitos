@@ -21,6 +21,11 @@ class Cancha extends Model
         'location',
         'user_id',
         'precio',
+        'tiene_luz_led',
+        'tiene_vestuarios',
+        'tiene_estacionamiento',
+        'tipo_cesped',
+        'photo_path',
     ];
 
     /**

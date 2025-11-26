@@ -14,6 +14,17 @@ use Carbon\Carbon;
 class TurnosDisponiblesController extends Controller
 {
     /**
+     * Mostrar página de inicio con todas las canchas
+     */
+    public function index()
+    {
+        $canchas = Cancha::all();
+        return view('home', [
+            'canchas' => $canchas,
+        ]);
+    }
+
+    /**
      * Mostrar los horarios disponibles para una cancha específica
      */
     public function show($canchaId)

@@ -22,6 +22,14 @@ class CanchaResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\FileUpload::make('photo_path')
+                    ->label('Foto de la Cancha')
+                    ->image()
+                    ->directory('canchas')
+                    ->maxSize(5120)
+                    ->nullable()
+                    ->disk('public'),
+                    
                 Forms\Components\TextInput::make('name')
                     ->label('Nombre de la Cancha')
                     ->required()
@@ -41,6 +49,28 @@ class CanchaResource extends Resource
                     ->default(150)
                     ->step(0.01)
                     ->prefix('$'),
+                
+                Forms\Components\Section::make('Características de la Cancha')
+                    ->description('Selecciona las características disponibles')
+                    ->schema([
+                        Forms\Components\Toggle::make('tiene_luz_led')
+                            ->label('Luz LED')
+                            ->default(false),
+                        Forms\Components\Toggle::make('tiene_vestuarios')
+                            ->label('Vestuarios')
+                            ->default(false),
+                        Forms\Components\Toggle::make('tiene_estacionamiento')
+                            ->label('Estacionamiento')
+                            ->default(false),
+                        Forms\Components\Select::make('tipo_cesped')
+                            ->label('Tipo de Césped')
+                            ->options([
+                                'sintetico' => 'Sintético',
+                                'real' => 'Real',
+                            ])
+                            ->required()
+                            ->default('sintetico'),
+                    ])->columns(2),
             ]);
     }
 
@@ -48,6 +78,9 @@ class CanchaResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('photo_path')
+                    ->label('Foto')
+                    ->height(50),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nombre')
                     ->searchable(),
@@ -61,6 +94,22 @@ class CanchaResource extends Resource
                     ->label('Precio')
                     ->money('ARS')
                     ->sortable(),
+                Tables\Columns\IconColumn::make('tiene_luz_led')
+                    ->label('Luz LED')
+                    ->boolean(),
+                Tables\Columns\IconColumn::make('tiene_vestuarios')
+                    ->label('Vestuarios')
+                    ->boolean(),
+                Tables\Columns\IconColumn::make('tiene_estacionamiento')
+                    ->label('Estacionamiento')
+                    ->boolean(),
+                Tables\Columns\BadgeColumn::make('tipo_cesped')
+                    ->label('Césped')
+                    ->formatStateUsing(fn (string $state): string => ucfirst($state))
+                    ->colors([
+                        'success' => 'sintetico',
+                        'info' => 'real',
+                    ]),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
