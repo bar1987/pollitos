@@ -21,10 +21,11 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse the migrations brian.
      */
     public function down(): void
     {
         Schema::dropIfExists('clients');
     }
 };
+
