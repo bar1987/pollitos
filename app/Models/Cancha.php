@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Cancha extends Model
 {
@@ -16,5 +19,28 @@ class Cancha extends Model
         'name',
         'type',
         'location',
+        'user_id',
+        'precio',
+        'tiene_luz_led',
+        'tiene_vestuarios',
+        'tiene_estacionamiento',
+        'tipo_cesped',
+        'photo_path',
     ];
+
+    /**
+     * Relación: Una cancha pertenece a un usuario (propietario)
+     */
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Relación: Una cancha tiene muchos turnos
+     */
+    public function turnos(): HasMany
+    {
+        return $this->hasMany(Turno::class);
+    }
 }
