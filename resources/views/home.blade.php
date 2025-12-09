@@ -20,6 +20,9 @@
                         <a href="{{ url('/dashboard') }}" class="text-gray-600 hover:text-gray-900 font-medium">
                             Dashboard
                         </a>
+                        <a href="{{ route('mis-turnos') }}" class="text-gray-600 hover:text-gray-900 font-medium">
+                            📅 Mis Turnos
+                        </a>
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
                             <button type="submit" class="text-gray-600 hover:text-gray-900 font-medium">
