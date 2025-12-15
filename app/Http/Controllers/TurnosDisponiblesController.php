@@ -276,5 +276,51 @@ class TurnosDisponiblesController extends Controller
             'turnos' => $turnos,
         ]);
     }
+
+    /**
+     * Mostrar estadísticas de alquileres
+     */
+    public function estadisticas()
+    {
+        // Obtener todas las canchas con sus turnos
+        $canchas = Cancha::withCount('turnos')->get();
+
+        // Total de turnos
+        $totalTurnos = Turno::count();
+
+        // Calcular ganancias (turnos * precio de cada cancha)
+        $gananciasTotales = 0;
+        $estadisticasPorCancha = [];
+        $nombresCancha = [];
+        $turnosPorCancha = [];
+
+        foreach ($canchas as $cancha) {
+            $cantidadTurnos = $cancha->turnos_count;
+            $ganancias = $cantidadTurnos * ($cancha->precio ?? 0);
+            $gananciasTotales += $ganancias;
+
+            $estadisticasPorCancha[] = [
+                'nombre' => $cancha->name,
+                'turnos' => $cantidadTurnos,
+                'precio' => $cancha->precio ?? 0,
+                'ganancias' => $ganancias,
+            ];
+
+            $nombresCancha[] = $cancha->name;
+            $turnosPorCancha[] = $cantidadTurnos;
+        }
+
+        // Cancha más popular
+        $canchaMasPopular = $canchas->sortByDesc('turnos_count')->first()?->name;
+
+        return view('estadisticas', [
+            'totalTurnos' => $totalTurnos,
+            'gananciasTotales' => $gananciasTotales,
+            'canchaMasPopular' => $canchaMasPopular,
+            'estadisticasPorCancha' => $estadisticasPorCancha,
+            'nombresCancha' => $nombresCancha,
+            'turnosPorCancha' => $turnosPorCancha,
+        ]);
+    }
 }
 

@@ -18,6 +18,9 @@
                     <x-nav-link href="{{ route('mis-turnos') }}" :active="request()->routeIs('mis-turnos')">
                         📅 {{ __('Mis Turnos') }}
                     </x-nav-link>
+                    <x-nav-link href="{{ route('estadisticas') }}" :active="request()->routeIs('estadisticas')">
+                        📊 {{ __('Estadísticas') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -147,6 +150,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link href="{{ route('mis-turnos') }}" :active="request()->routeIs('mis-turnos')">
                 📅 {{ __('Mis Turnos') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('estadisticas') }}" :active="request()->routeIs('estadisticas')">
+                📊 {{ __('Estadísticas') }}
             </x-responsive-nav-link>
         </div>
 

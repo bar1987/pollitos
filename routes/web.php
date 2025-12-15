@@ -20,6 +20,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     
     // Mis Turnos
     Route::get('/mis-turnos', [TurnosDisponiblesController::class, 'misTurnos'])->name('mis-turnos');
+    
+    // Estadísticas
+    Route::get('/estadisticas', [TurnosDisponiblesController::class, 'estadisticas'])->name('estadisticas');
 });
 
 
