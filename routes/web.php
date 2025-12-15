@@ -17,6 +17,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::post('/confirmar-pago', [TurnosDisponiblesController::class, 'confirmarPago'])->name('confirmar-pago');
     
     Route::get('/confirmacion-turno/{turno}', [TurnosDisponiblesController::class, 'confirmacionTurno'])->name('confirmacion-turno');
+    
+    // Mis Turnos
+    Route::get('/mis-turnos', [TurnosDisponiblesController::class, 'misTurnos'])->name('mis-turnos');
+    
+    // Estadísticas
+    Route::get('/estadisticas', [TurnosDisponiblesController::class, 'estadisticas'])->name('estadisticas');
 });
 
 

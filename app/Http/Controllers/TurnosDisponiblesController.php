@@ -9,6 +9,7 @@ use App\Models\Horario;
 use App\Models\Pago;
 use App\Models\Turno;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class TurnosDisponiblesController extends Controller
@@ -227,6 +228,7 @@ class TurnosDisponiblesController extends Controller
             $turno = Turno::create([
                 'cancha_id' => $turno_pendiente['cancha_id'],
                 'client_id' => $client->id,
+                'user_id' => Auth::id(),
                 'start_datetime' => Carbon::parse($turno_pendiente['fecha'] . ' ' . $turno_pendiente['hora_inicio']),
             ]);
 
@@ -241,7 +243,7 @@ class TurnosDisponiblesController extends Controller
             // Limpiar sesión
             session()->forget(['turno_pendiente', 'datos_pago']);
 
-            return redirect('/')->with('success', 'Pago confirmado exitosamente. Tu turno ha sido registrado.');
+            return redirect('/')->with('success', 'Turno agendado correctamente');
         } catch (\Exception $e) {
             \Log::error('Error al confirmar pago: ' . $e->getMessage());
             return redirect('/')->with('error', 'Error al procesar el pago. Por favor, intenta nuevamente.');
@@ -257,6 +259,67 @@ class TurnosDisponiblesController extends Controller
 
         return view('confirmacion-turno', [
             'turno' => $turno,
+        ]);
+    }
+
+    /**
+     * Mostrar los turnos del usuario autenticado
+     */
+    public function misTurnos()
+    {
+        $turnos = Turno::with('cancha')
+            ->where('user_id', Auth::id())
+            ->orderBy('start_datetime', 'desc')
+            ->paginate(10);
+
+        return view('mis-turnos', [
+            'turnos' => $turnos,
+        ]);
+    }
+
+    /**
+     * Mostrar estadísticas de alquileres
+     */
+    public function estadisticas()
+    {
+        // Obtener todas las canchas con sus turnos
+        $canchas = Cancha::withCount('turnos')->get();
+
+        // Total de turnos
+        $totalTurnos = Turno::count();
+
+        // Calcular ganancias (turnos * precio de cada cancha)
+        $gananciasTotales = 0;
+        $estadisticasPorCancha = [];
+        $nombresCancha = [];
+        $turnosPorCancha = [];
+
+        foreach ($canchas as $cancha) {
+            $cantidadTurnos = $cancha->turnos_count;
+            $ganancias = $cantidadTurnos * ($cancha->precio ?? 0);
+            $gananciasTotales += $ganancias;
+
+            $estadisticasPorCancha[] = [
+                'nombre' => $cancha->name,
+                'turnos' => $cantidadTurnos,
+                'precio' => $cancha->precio ?? 0,
+                'ganancias' => $ganancias,
+            ];
+
+            $nombresCancha[] = $cancha->name;
+            $turnosPorCancha[] = $cantidadTurnos;
+        }
+
+        // Cancha más popular
+        $canchaMasPopular = $canchas->sortByDesc('turnos_count')->first()?->name;
+
+        return view('estadisticas', [
+            'totalTurnos' => $totalTurnos,
+            'gananciasTotales' => $gananciasTotales,
+            'canchaMasPopular' => $canchaMasPopular,
+            'estadisticasPorCancha' => $estadisticasPorCancha,
+            'nombresCancha' => $nombresCancha,
+            'turnosPorCancha' => $turnosPorCancha,
         ]);
     }
 }
